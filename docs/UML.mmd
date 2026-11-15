@@ -1,0 +1,44 @@
+classDiagram
+  direction LR
+  class IDevice {
+    <<interface>>
+    +string Name
+    +bool IsOn
+    +TurnOn()
+    +TurnOff()
+  }
+  class ILockable {
+    <<interface>>
+    +bool IsLocked
+    +Lock()
+    +Unlock()
+  }
+  class SmartLight
+  class SmartFan
+  class SmartDoor
+  class DeviceFactory {
+    <<Factory>>
+    +Create(type, name) IDevice
+  }
+  class HomeConfiguration {
+    <<Singleton>>
+    +Instance HomeConfiguration
+    +HomeName string
+    +NightLightLevel int
+  }
+  class SmartHomeFacade {
+    <<Facade>>
+    -light IDevice
+    -fan IDevice
+    -door ILockable
+    +GoToWork()
+    +GoToSleep()
+  }
+  IDevice <|.. SmartLight
+  IDevice <|.. SmartFan
+  IDevice <|.. SmartDoor
+  ILockable <|.. SmartDoor
+  DeviceFactory ..> IDevice : creates
+  SmartHomeFacade --> IDevice : light/fan
+  SmartHomeFacade --> ILockable : door
+  SmartHomeFacade ..> HomeConfiguration : reads
